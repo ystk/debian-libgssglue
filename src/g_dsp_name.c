@@ -49,7 +49,7 @@ gss_OID *		output_name_type;
     OM_uint32		major_status;
     gss_union_name_t	union_name;
 
-    if (input_name == 0)
+    if (input_name == GSS_C_NO_NAME)
 	return GSS_S_BAD_NAME;
 
     union_name = (gss_union_name_t) input_name;

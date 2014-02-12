@@ -17,6 +17,12 @@
    (((o1)->length == (o2)->length) && \
     (memcmp((o1)->elements,(o2)->elements,(int) (o1)->length) == 0))
 
+#define g_OID_copy(o1, o2)                                      \
+do {                                                            \
+        memcpy((o1)->elements, (o2)->elements, (o2)->length);   \
+	        (o1)->length = (o2)->length;                    \
+		} while (0)
+
 /*
  * Array of context IDs typed by mechanism OID
  */

@@ -195,7 +195,8 @@ static void solaris_initialize ()
     void *dl;
     gss_mechanism (*sym)(void), mech;
 
-    if ((filename = getenv("GSSAPI_MECH_CONF")) == NULL)
+    if ((getuid() != geteuid()) ||
+        ((filename = getenv("GSSAPI_MECH_CONF")) == NULL))
 	filename = MECH_CONF;
 
     if ((conffile = fopen(filename, "r")) == NULL) {
@@ -250,6 +251,7 @@ static void solaris_initialize ()
 	    dlclose(dl);
 
     } /* while */
+    fclose(conffile);
 
     return;
 }
@@ -270,7 +272,8 @@ static void linux_initialize ()
     void *dl;
     gss_mechanism (*sym)(void), mech;
 
-    if ((filename = getenv("GSSAPI_MECH_CONF")) == NULL)
+    if ((getuid() != geteuid()) ||
+        ((filename = getenv("GSSAPI_MECH_CONF")) == NULL))
 	filename = MECH_CONF;
 
     if ((conffile = fopen(filename, "r")) == NULL) {
@@ -342,6 +345,7 @@ static void linux_initialize ()
 	}
 
     } /* while */
+    fclose(conffile);
 
     return;
 }

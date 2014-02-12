@@ -375,3 +375,78 @@ generic_gss_str_to_oid(minor_status, oid_str, oid)
     return(GSS_S_FAILURE);
 }
 
+/*
+ * Copyright 1993 by OpenVision Technologies, Inc.
+ *
+ * Permission to use, copy, modify, distribute, and sell this software
+ * and its documentation for any purpose is hereby granted without fee,
+ * provided that the above copyright notice appears in all copies and
+ * that both that copyright notice and this permission notice appear in
+ * supporting documentation, and that the name of OpenVision not be used
+ * in advertising or publicity pertaining to distribution of the software
+ * without specific, written prior permission. OpenVision makes no
+ * representations about the suitability of this software for any
+ * purpose.  It is provided "as is" without express or implied warranty.
+ *
+ * OPENVISION DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+ * INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO
+ * EVENT SHALL OPENVISION BE LIABLE FOR ANY SPECIAL, INDIRECT OR
+ * CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
+ * USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+OM_uint32
+generic_gss_copy_oid_set(OM_uint32 *minor_status,
+                         const gss_OID_set_desc * const oidset,
+                         gss_OID_set *new_oidset)
+{
+    gss_OID_set_desc *copy;
+    OM_uint32 minor = 0;
+    OM_uint32 major = GSS_S_COMPLETE;
+    OM_uint32 i;
+
+    if (minor_status != NULL)
+        *minor_status = 0;
+
+    if (new_oidset != NULL)
+        *new_oidset = GSS_C_NO_OID_SET;
+
+    if (oidset == GSS_C_NO_OID_SET)
+        return (GSS_S_CALL_INACCESSIBLE_READ);
+
+    if (new_oidset == NULL)
+        return (GSS_S_CALL_INACCESSIBLE_WRITE);
+
+    if ((copy = (gss_OID_set_desc *) calloc(1, sizeof (*copy))) == NULL) {
+        major = GSS_S_FAILURE;
+        goto done;
+    }
+
+    if ((copy->elements = (gss_OID_desc *)
+         calloc(oidset->count, sizeof (*copy->elements))) == NULL) {
+        major = GSS_S_FAILURE;
+        goto done;
+    }
+    copy->count = oidset->count;
+
+    for (i = 0; i < copy->count; i++) {
+        gss_OID_desc *out = &copy->elements[i];
+        gss_OID_desc *in = &oidset->elements[i];
+
+        if ((out->elements = (void *) malloc(in->length)) == NULL) {
+            major = GSS_S_FAILURE;
+            goto done;
+        }
+        (void) memcpy(out->elements, in->elements, in->length);
+        out->length = in->length;
+    }
+
+    *new_oidset = copy;
+done:
+    if (major != GSS_S_COMPLETE) {
+        (void) gss_release_oid_set(&minor, &copy);
+    }
+
+    return (major);
+}
