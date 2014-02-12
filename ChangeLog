@@ -1,3 +1,29 @@
+2012-05-08: kwc
+	Release 0.4
+	Changes since libgssglue-0.3:
+	- Fix for CVE-2011-2709
+	  Patch from Marcus Meissner
+	  Note: Although https://bugzilla.novell.com/show_bug.cgi?id=694598
+	  mentions mount.nfs, libgssglue is not used by mount.nfs.
+2011-06-22: kwc
+	Release 0.3
+	Changes since libgssglue-0.2:
+	- Add new typedefs defined in RFC 5587 and used
+	  in newer versions of MIT Kerberos.  Fixes a
+	  commpile error in nfs-utils which uses gssapi.h
+	  from this package and other gss headers from the
+	  Kerberos distribution.
+
+2011-03-16: kwc
+	Release 0.2
+	Changes since libgssglue-0.1:
+	- Modify the gss_acquire_cred() code to accept, and
+	  properly handle, an input name of GSS_C_NO_NAME.
+	  Other misc. changes to support this change.
+	- Remove some generated files from git.  Change
+	  autogen.sh to clean up files that might become
+	  outdated and incompatible.
+
 2007-09-04: kwc
 	Release 0.1 (of libgssglue)
 	* ****************************************

@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.59)
-AC_INIT(libgssglue, 0.1, nfsv4-wg@citi.umich.edu)
+AC_INIT(libgssglue, 0.4, nfsv4-wg@citi.umich.edu)
 AC_CONFIG_SRCDIR([src/g_accept_sec_context.c])
 AM_INIT_AUTOMAKE
 AM_PROG_LIBTOOL
